@@ -1,0 +1,55 @@
+# Ignore build output
+bin/
+obj/
+
+# Rider / VSCode / Visual Studio settings
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet packages (optional - if not using package restore)
+*.nupkg
+packages/
+
+# Build results
+*.dll
+*.exe
+*.app
+*.pdb
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# DotCover
+*.dotCover
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+*.dbmdl
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Application-specific
+appsettings.*.json
+secrets.json
+
+# Optional: exclude appsettings.json (if you keep secrets here)
+# Uncomment the next line if you don’t want to commit config
+# appsettings.json
+
+# Publish output
+publish/
+.vs/
