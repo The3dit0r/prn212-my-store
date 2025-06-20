@@ -1,22 +1,15 @@
-﻿using BusinessObjects;
+﻿using Microsoft.EntityFrameworkCore;
+using BusinessObjects;
 
 namespace DataAccessLayer;
-public class ProductDAO {
-  public List<Product> GetProducts() {
-    var list = new List<Product>();
+public class ProductDAO : _BaseDAO<Product> {
+  public ProductDAO() : base(new DatabaseContext().Products) { }
 
-    using var context = new DatabaseContext();
-    list = context.Products.ToList();
-
-    return list;
+  public Product? GetItem(int id) {
+    return GetItem((item) => item.ProductId == id);
   }
 
-  public Product? GetProduct(int id) {
-    Product? product = null;
-
-    using var context = new DatabaseContext();
-    product = context.Products.Where(prod => prod.ProductId == id).FirstOrDefault();
-
-    return product;
+  public void RemoveItem(int id) {
+    RemoveItems((item) => item.ProductId == id);
   }
 }

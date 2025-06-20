@@ -1,17 +1,15 @@
-﻿using BusinessObjects;
+﻿using Microsoft.EntityFrameworkCore;
+using BusinessObjects;
 
 namespace DataAccessLayer;
-public class CategoryDAO {
-    public CategoryDAO() {
+public class CategoryDAO: _BaseDAO<Category> {
+  public CategoryDAO(DbSet<Category> dbset): base(dbset) {}
 
-    }
+  public Category? GetItem(int id) {
+    return GetItem((item) => item.CategoryId == id);
+  }
 
-    public static List<Category> GetCategories() {
-        var list = new List<Category>();
-
-        using var context = new DatabaseContext();
-        list = context.Categories.ToList();
-
-        return list;
-    }
+  public void RemoveItem(int id) {
+    RemoveItems((item) => item.CategoryId == id);
+  }
 }
