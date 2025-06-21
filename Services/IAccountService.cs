@@ -9,8 +9,6 @@ namespace Services;
 public interface IAccountService {
   AccountMember? GetAccount(string accountId);
   List<AccountMember> GetAccounts();
-  void AddAccount(AccountMember account);
-  void DeleteAccount(string accountId);
-  void DeleteAccount(AccountMember account);
-  void UpdateAccount(AccountMember account);
+
+  AccountMember Login(string username, string password);
 }

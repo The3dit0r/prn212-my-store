@@ -10,13 +10,13 @@ public partial class DatabaseContext : DbContext {
   public DatabaseContext() {
   }
 
-  public static DatabaseContext UseInMemory(string TestDBName) {
-    var options = new DbContextOptionsBuilder<DatabaseContext>()
-          .UseInMemoryDatabase(databaseName: $"TestDB_{TestDBName}")
-          .Options;
+  //public static DatabaseContext UseInMemory(string TestDBName) {
+  //  var options = new DbContextOptionsBuilder<DatabaseContext>()
+  //        .UseInMemoryDatabase(databaseName: $"TestDB_{TestDBName}")
+  //        .Options;
 
-    return new DatabaseContext(options);
-  }
+  //  return new DatabaseContext(options);
+  //}
 
   public DatabaseContext(DbContextOptions<DatabaseContext> options)
       : base(options) {

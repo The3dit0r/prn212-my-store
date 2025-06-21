@@ -9,19 +9,6 @@ public class AccountService: IAccountService {
   public AccountService() {
     repo = new AccountMemberRepository();
   }
-
-  public void AddAccount(AccountMember account) {
-    repo.AddAccount(account);
-  }
-
-  public void DeleteAccount(string accountId) {
-    repo.DeleteAccount(accountId);
-  }
-
-  public void DeleteAccount(AccountMember account) {
-    repo.DeleteAccount(account);
-  }
-
   public AccountMember? GetAccount(string accountId) {
     return repo.GetAccount(accountId);
   }
@@ -30,7 +17,16 @@ public class AccountService: IAccountService {
     return repo.GetAccounts();
   }
 
-  public void UpdateAccount(AccountMember account) {
-    repo.UpdateAccount(account);
+  public AccountMember Login(string username, string password) {
+    var user = repo.GetAccount(username);
+    if (user == null) {
+      throw new Exception($"Cannot find account with username: {username}");
+    }
+
+    if (user.MemberPassword.Equals(password)) {
+      return user;
+    }
+
+    throw new Exception($"Login password for {username} is incorrect!");
   }
 }
