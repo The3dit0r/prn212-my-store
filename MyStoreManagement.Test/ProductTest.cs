@@ -13,7 +13,7 @@ public class Products {
 
   [Fact]
   public void GetProducts_ShouldReturnProducts() {
-    var products = DAO.GetItems();
+    var products = DAO.GetAllItems();
     Assert.NotNull(products);
   }
 

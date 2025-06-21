@@ -9,13 +9,13 @@ public class _BaseDAO<T> where T : class {
     _dbSet = dbSet;
   }
 
-  public List<T> GetItems() {
+  public List<T> GetAllItems() {
     List<T> items = [.. _dbSet.ToList()];
     return items;
   }
 
   public List<T> GetItems(Func<T, bool> condition) {
-    return GetItems().Where(condition).ToList();
+    return GetAllItems().Where(condition).ToList();
   }
 
   public T? GetItem(Func<T, bool> condition) {

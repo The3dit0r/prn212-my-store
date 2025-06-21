@@ -3,7 +3,7 @@ using BusinessObjects;
 
 namespace DataAccessLayer;
 public class CategoryDAO: _BaseDAO<Category> {
-  public CategoryDAO(DbSet<Category> dbset): base(dbset) {}
+  public CategoryDAO(): base(new DatabaseContext().Categories) {}
 
   public Category? GetItem(int id) {
     return GetItem((item) => item.CategoryId == id);

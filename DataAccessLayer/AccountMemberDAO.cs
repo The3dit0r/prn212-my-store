@@ -3,7 +3,7 @@ using BusinessObjects;
 
 namespace DataAccessLayer;
 public class AccountMemberDAO : _BaseDAO<AccountMember> {
-  public AccountMemberDAO(DbSet<AccountMember> dbset) : base(dbset) { }
+  public AccountMemberDAO() : base(new DatabaseContext().AccountMembers) { }
 
   public AccountMember? GetItem(string id) {
     return GetItem((item) => item.MemberId == id);

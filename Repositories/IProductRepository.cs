@@ -3,13 +3,14 @@ using BusinessObjects;
 
 namespace Repositories;
 public interface IProductRepository {
-  void SaveProduct(Product p);
+  void AddProduct(Product p);
 
   void DeleteProduct(Product p);
+  void DeleteProduct(int id);
 
   void UpdateProduct(Product p);
 
   List<Product> GetProducts();
 
-  Product GetProductById(int id);
+  Product? GetProduct(int id);
 }
