@@ -3,7 +3,7 @@ using BusinessObjects;
 
 namespace DataAccessLayer;
 public class ProductDAO : _BaseDAO<Product> {
-  public ProductDAO() : base(new DatabaseContext().Products) { }
+  public ProductDAO() : base(new DatabaseContext(), "Products") { }
 
   public Product? GetItem(int id) {
     return GetItem((item) => item.ProductId == id);
