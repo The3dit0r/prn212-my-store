@@ -17,7 +17,7 @@ public class AccountMemberRepository: IAccountRepository {
     dao.RemoveItem(account);
   }
 
-  public AccountMember? GetAccountById(string accountId) {
+  public AccountMember? GetAccount(string accountId) {
     return dao.GetItem(accountId);
   }
 
