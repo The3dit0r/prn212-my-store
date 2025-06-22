@@ -29,6 +29,19 @@ public partial class MainWindow : Window {
     }
   }
 
+  public MainWindow(bool disableLoad) {
+    InitializeComponent();
+
+    if (disableLoad) {
+      LoadingText.Text = "Please login to continue";
+      LoadingStatus.Opacity = 0;
+      ButtonsControl.Opacity = 1;
+      Loading = false;
+
+      return;
+    }
+  }
+
   public MainWindow() {
     InitializeComponent();
 
@@ -67,8 +80,8 @@ public partial class MainWindow : Window {
   }
 
   private async void LoadAuthWindow() {
-    LoadingText.Text = "Waiting for authentication";
-    Loading = true;
+    LoadingText.Text = "Waiting for authentication\n\n. . . . .";
+    Loading = false;
     ButtonsControl.Opacity = 0;
 
     Window win = new LoginWindow() {
@@ -77,11 +90,12 @@ public partial class MainWindow : Window {
 
     bool? success = win.ShowDialog();
     if (success == true) {
+      Loading = true;
       ButtonsControl.IsEnabled = false;
 
-      LoadingText.Text = "Initialize UI";
+      LoadingText.Text = "Initialize UI ...";
       await Task.Delay(1000);
-      LoadingText.Text = "Launching application";
+      LoadingText.Text = "Launching application ...";
       await Task.Delay(1000);
 
       LaunchMainApplication();

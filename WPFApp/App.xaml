@@ -7,7 +7,9 @@
     <ResourceDictionary>
 
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Global.xaml"/>
+        <ResourceDictionary Source="/Theme/Global.xaml"/>
+        <ResourceDictionary Source="/Theme/Button.xaml"/>
+        <ResourceDictionary Source="/Theme/Input.xaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

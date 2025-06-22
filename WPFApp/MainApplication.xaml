@@ -34,11 +34,14 @@
 
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="1*" />
         <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="1*" />
       </Grid.ColumnDefinitions>
 
-      <DataGrid Grid.Column="0" x:Name="ProdDataGrid" IsReadOnly="True" SelectionChanged="ProdDataGrid_SelectionChanged">
+      <DataGrid Grid.Column="1" x:Name="ProdDataGrid" 
+                SelectionChanged="ProdDataGrid_SelectionChanged"
+                IsReadOnly="True" 
+                AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn">
         <DataGrid.CellStyle>
           <Style TargetType="DataGridCell">
             <Setter Property="Template">
@@ -57,7 +60,7 @@
         </DataGrid.CellStyle>
       </DataGrid>
 
-      <Border Grid.Column="1" BorderThickness="0, 0.5" BorderBrush="#000" x:Name="Sidebar">
+      <Border Grid.Column="0" BorderThickness="0, 0.5" BorderBrush="#000" x:Name="Sidebar">
         <StackPanel Margin="16" x:Name="ProductDetails">
           <StackPanel Margin="0, 0, 0, 8">
             <Grid>
@@ -72,7 +75,7 @@
                   <TextBlock Text="{Binding ProductId}" />
                 </StackPanel>
               </StackPanel>
-              <Button Grid.Column="1" Click="CloseSide_Click">Close</Button>
+              <Button Grid.Column="1" Click="CloseSide_Click">✖</Button>
             </Grid>
           </StackPanel>
 
@@ -106,9 +109,11 @@
           </Grid>
 
           <Rectangle Height="38"/>
-          <Button>Update</Button>
+          <Button Click="Update_Click">Update info</Button>
           <Rectangle Height="8"/>
-          <Button>Remove</Button>
+          <Button Click="Remove_Click" Background="DarkRed">
+            Remove product
+          </Button>
         </StackPanel>
       </Border>
     </Grid>
@@ -121,11 +126,13 @@
       </Grid.ColumnDefinitions>
 
       <StackPanel Grid.Column="0">
-        <Button Width="120">Exit</Button>
+        <Button Padding="24, 6" Click="Exit_Click" Background="#ededed" Foreground="#000">
+          Exit / Log out
+        </Button>
       </StackPanel>
 
       <StackPanel Grid.Column="2" Orientation="Horizontal">
-        <Button Padding="24, 4">Create product</Button>
+        <Button Padding="24, 6" Click="NewProduct_Click">✚ Add new product</Button>
       </StackPanel>
     </Grid>
   </Grid>

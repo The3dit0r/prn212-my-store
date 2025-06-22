@@ -32,13 +32,13 @@ namespace WPFApp {
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private string _query;
-    public string Query {
-      get => _query;
-      set {
-        _query = value;
-      }
-    }
+    //private string _query;
+    //public string Query {
+    //  get => _query;
+    //  set {
+    //    _query = value;
+    //  }
+    //}
 
     public string ProdStat {
       get => _prodStat;
@@ -48,8 +48,8 @@ namespace WPFApp {
       }
     }
 
-    private Product curProduct = new Product();
-    public Product CurProduct {
+    private Product? curProduct;
+    public Product? CurProduct {
       get => curProduct;
       set {
         curProduct = value;
@@ -65,6 +65,12 @@ namespace WPFApp {
       CategoryComboList.ItemsSource = boxItems;
     }
 
+    private void RefreshDataList() {
+      products = pservice.GetProducts();
+      ProdDataGrid.ItemsSource = products;
+      ProdStat = $"Total products: {products.Count}";
+    }
+
     public MainApplication() {
       InitializeComponent();
       DataContext = this;
@@ -72,12 +78,10 @@ namespace WPFApp {
       pservice = new ProductService();
       cservice = new CategoryService();
 
-      products = pservice.GetProducts();
       categories = cservice.GetCategories();
       PopulateComboBox();
 
-      ProdDataGrid.ItemsSource = products;
-      ProdStat = $"Total products: {products.Count}";
+      RefreshDataList();
 
       ToggleSidebar(false);
     }
@@ -104,18 +108,29 @@ namespace WPFApp {
 
         ToggleSidebar(true);
 
+        if (null == CurProduct) {
+          CategoryComboList.SelectedIndex = -1;
+          return; 
+        }
+        int curProId = CurProduct.CategoryId ?? -1;
+
+
         CategoryComboList.SelectedIndex = Array.IndexOf(
           categories.Select(c => c.CategoryId).ToArray(),
-          CurProduct.CategoryId
+          curProId
         );
       }
     }
 
     private void Update_Click(object sender, RoutedEventArgs e) {
+      if (CurProduct == null) return;
       pservice.UpdateProduct(CurProduct);
+      RefreshDataList();
     }
 
     private void CategoryComboList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+      if (CurProduct == null) return;
+
       if (firstView) {
         firstView = false;
         return;
@@ -124,8 +139,70 @@ namespace WPFApp {
       CurProduct.CategoryId = categories[CategoryComboList.SelectedIndex].CategoryId;
       // Not using binding, the only way to fix
       pservice.UpdateProduct(CurProduct);
-      products = pservice.GetProducts();
-      ProdDataGrid.ItemsSource = products;
+      RefreshDataList();
+    }
+
+    private void Remove_Click(object sender, RoutedEventArgs e) {
+      if (CurProduct == null) return;
+
+      string d = $"Product: [ID: {CurProduct.ProductId}] {CurProduct.ProductName}";
+
+      var ans = MessageBox.Show(
+        "Are you sure you want to remove the following item?\n" 
+        + d + "\n\nThis action is not revertable",
+        "Confirmation",
+        MessageBoxButton.YesNo,
+        MessageBoxImage.Warning
+      );
+
+      if (ans != MessageBoxResult.Yes) {
+        return;
+      }
+
+      pservice.DeleteProduct(CurProduct);
+      RefreshDataList();
+
+      try {
+        CurProduct = null;
+        MessageBox.Show("Product removed!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+      } catch { }
+    }
+
+    private void LaunchMainWindow() {
+      var initial = Application.Current.MainWindow;
+      Application.Current.MainWindow = new MainWindow(true);
+      Application.Current.MainWindow.Show();
+
+      initial.Close();
+    }
+
+    private void Exit_Click(object sender, RoutedEventArgs e) {
+      var ans = MessageBox.Show(
+        "Are you sure you want to exit?",
+        "Confirmation",
+        MessageBoxButton.YesNo,
+        MessageBoxImage.Question
+      );
+
+      if (ans != MessageBoxResult.Yes) {
+        return;
+      }
+
+      LaunchMainWindow();
+    }
+
+    private void NewProduct_Click(object sender, RoutedEventArgs e) {
+      var wind = new CreateProductWindow() {
+        Owner = Window.GetWindow(this)
+      };
+
+      if (wind.ShowDialog() != true) return;
+      RefreshDataList();
+    }
+    private void DataGrid_OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e) {
+      if (e.PropertyName == "Category") {
+        e.Column = null;
+      }
     }
   }
 }

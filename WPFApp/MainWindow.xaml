@@ -14,10 +14,22 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Margin="0, 64">
-      <TextBlock Text="My Store Database" FontSize="40" TextAlignment="Center" FontWeight="Bold"/>
-      <TextBlock Text="DB Management Tools" FontSize="16" TextAlignment="Center"/>
-    </StackPanel>
+    <Grid Grid.Row="0" Margin="0, 64" MaxWidth="560">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="24"/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0">
+        <Image Source="/Assets/icon.png" Width="84" Height="84" />
+      </StackPanel>
+
+      <StackPanel Grid.Column="2" VerticalAlignment="Center">
+        <TextBlock Text="My Store Database" FontSize="40" FontWeight="Bold"/>
+        <TextBlock Text="DB Management Tools" FontSize="16" />
+      </StackPanel>
+    </Grid>
 
     <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="LoadingStatus">
       <Border Padding="1" Margin="16" BorderThickness="1" BorderBrush="#000" Width="Auto">
@@ -29,8 +41,8 @@
       <TextBlock Text="Loading application" x:Name="LoadingText" TextAlignment="Center"/>
       <StackPanel x:Name="ButtonsControl" Margin="0, 16, 0, 0" Orientation="Horizontal">
         <Button Click="LoginButton_Click" Width="160">Login</Button>
-        <TextBlock Text="Or" TextAlignment="Center" Padding="8" Width="60"/>
-        <Button Click="CloseButton_Click" Width="160">Exit application</Button>
+        <TextBlock Text="Or" TextAlignment="Center" VerticalAlignment="Center" Padding="8" Width="60"/>
+        <Button Click="CloseButton_Click" Background="#f0f0f0" Foreground="#000">Exit application</Button>
       </StackPanel>
     </StackPanel>
 

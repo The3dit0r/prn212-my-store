@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFApp"
         mc:Ignorable="d"
-        Title="Login - My Store DB" Height="450" Width="500">
+        Title="Login - My Store DB" 
+        Height="450" MaxHeight="450" MinHeight="450" 
+        Width="450" MinWidth="450">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="40"/>
@@ -14,15 +16,26 @@
       <RowDefinition Height="1*"/>
     </Grid.RowDefinitions>
 
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1">
-      <TextBlock Text="Login" FontSize="34" TextAlignment="Center" FontWeight="Bold"/>
-      <TextBlock Text="My Store Database" FontSize="16" TextAlignment="Center"/>
-    </StackPanel>
+
+    <Grid Grid.Row="1" Margin="32, 0" MaxWidth="460">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="16"/>
+        <ColumnDefinition Width="1*"/>
+      </Grid.ColumnDefinitions>
+      
+      <Image Source="/Assets/login.png" Width="64" Height="64" Grid.Column="0"/>
+      
+      <StackPanel VerticalAlignment="Center" Grid.Column="2">
+        <TextBlock Text="My Store Database" FontSize="16" />
+        <TextBlock Text="Login" FontSize="34" FontWeight="Bold" />
+      </StackPanel>
+    </Grid>
 
     <!--StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
     </StackPanel-->
 
-    <StackPanel Grid.Row="3" Margin="32, 0" MaxWidth="400" >
+    <StackPanel Grid.Row="3" Margin="32, 0" MaxWidth="440" >
       <Label Content="Username" />
       <TextBox x:Name="UsernameInput" />
       <Label Content="Password"/>
