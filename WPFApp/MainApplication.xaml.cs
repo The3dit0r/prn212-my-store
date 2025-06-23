@@ -1,6 +1,8 @@
 ﻿using BusinessObjects;
+using Microsoft.IdentityModel.Tokens;
 using Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -66,9 +68,11 @@ namespace WPFApp {
     }
 
     private void RefreshDataList() {
-      products = pservice.GetProducts();
-      ProdDataGrid.ItemsSource = products;
-      ProdStat = $"Total products: {products.Count}";
+      var newProducts = pservice.GetProducts();
+      products = newProducts.ToList();
+      ProdDataGrid.ItemsSource = products.Where(FilterProdByQuery);
+      
+      ProdStat = $"Current product count: {products.Count}";
     }
 
     public MainApplication() {
@@ -81,7 +85,8 @@ namespace WPFApp {
       categories = cservice.GetCategories();
       PopulateComboBox();
 
-      RefreshDataList();
+      SearchQuery = "";
+      //RefreshDataList();
 
       ToggleSidebar(false);
     }
@@ -98,28 +103,34 @@ namespace WPFApp {
       ToggleSidebar(false);
     }
 
-    private void ProdDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-      if (sender is DataGrid) {
-        firstView = true;
+    private void ToggleProductDetail(Product prod) {
+      CurProduct = prod;
 
-        CurProduct = (Product)((DataGrid)sender).SelectedItem;
+      firstView = true;
+      ProductDetails.DataContext = CurProduct;
+      ToggleSidebar(true);
 
-        ProductDetails.DataContext = CurProduct;
-
-        ToggleSidebar(true);
-
-        if (null == CurProduct) {
-          CategoryComboList.SelectedIndex = -1;
-          return; 
-        }
-        int curProId = CurProduct.CategoryId ?? -1;
-
-
-        CategoryComboList.SelectedIndex = Array.IndexOf(
-          categories.Select(c => c.CategoryId).ToArray(),
-          curProId
-        );
+      if (null == CurProduct) {
+        CategoryComboList.SelectedIndex = -1;
+        return;
       }
+
+      int curProId = CurProduct.CategoryId ?? -1;
+
+
+      CategoryComboList.SelectedIndex = Array.IndexOf(
+        categories.Select(c => c.CategoryId).ToArray(),
+        curProId
+      );
+    }
+
+    private void ProdDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+      if (sender is not DataGrid) {
+        return;
+      }
+
+      var prod = (Product)((DataGrid)sender).SelectedItem;
+      ToggleProductDetail(prod);
     }
 
     private void Update_Click(object sender, RoutedEventArgs e) {
@@ -148,7 +159,7 @@ namespace WPFApp {
       string d = $"Product: [ID: {CurProduct.ProductId}] {CurProduct.ProductName}";
 
       var ans = MessageBox.Show(
-        "Are you sure you want to remove the following item?\n" 
+        "Are you sure you want to remove the following item?\n"
         + d + "\n\nThis action is not revertable",
         "Confirmation",
         MessageBoxButton.YesNo,
@@ -199,10 +210,72 @@ namespace WPFApp {
       if (wind.ShowDialog() != true) return;
       RefreshDataList();
     }
+
     private void DataGrid_OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e) {
       if (e.PropertyName == "Category") {
         e.Column = null;
       }
+    }
+
+    private string _query = "";
+    string SearchQuery {
+      get => _query;
+      set {
+        _query = value;
+        RefreshDataList();
+      }
+    }
+
+    private bool FilterProdByQuery(Product prod) {
+      var s1 = prod.ProductName.ToLower();
+      var s2 = $"id:{prod.ProductId}".ToLower();
+      var s3 = $"cat:{prod.CategoryId}".ToLower();
+      var q = _query.ToLower();
+
+      if (s1.Contains(q)) return true;
+      if (q == s2 || q == s3) return true;
+
+      return false;
+    }
+
+    private void SQuery_TextChanged(object sender, object _) {
+      if (SQueryBox.IsFocused) {
+        SearchQuery = SQueryBox.Text;
+      }
+    }
+
+    private void SetBoxText(bool focus) {
+      var showPlaceholder = !focus && _query.Length == 0;
+
+      if (showPlaceholder) {
+        SQueryBox.Text = "Search for products (query | id:<id> | cat:<category_id>) . . .";
+        SQueryBox.Foreground = Brushes.Gray;
+
+        return;
+      }
+
+      SQueryBox.Text = _query;
+      SQueryBox.Foreground = Brushes.Black;
+    }
+
+    private void SQueryBox_GotFocus(object sender, object _) {
+      SetBoxText(true);
+    }
+
+    private void SQueryBox_LostFocus(object sender, object _) {
+      SetBoxText(false);
+    }
+
+    private void RndBtt_Click(object sender, RoutedEventArgs e) {
+      if (products.IsNullOrEmpty()) return;
+
+      var r = products[new Random().Next(products.Count)];
+      var s = $"id:{r.ProductId}";
+
+      SQueryBox.Text = s;
+      SearchQuery = s;
+
+      ToggleProductDetail(products[products.IndexOf(r)]);
     }
   }
 }

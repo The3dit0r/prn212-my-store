@@ -93,9 +93,9 @@ public partial class MainWindow : Window {
       Loading = true;
       ButtonsControl.IsEnabled = false;
 
-      LoadingText.Text = "Initialize UI ...";
+      LoadingText.Text = "Initialize UI";
       await Task.Delay(1000);
-      LoadingText.Text = "Launching application ...";
+      LoadingText.Text = "Launching application";
       await Task.Delay(1000);
 
       LaunchMainApplication();

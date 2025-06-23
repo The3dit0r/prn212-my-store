@@ -1,6 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+  <CornerRadius x:Key="BrdRad">6</CornerRadius>
+
+
   <Style TargetType="TextBlock">
     <Setter Property="FontFamily" Value="Cascadia Code" />
     <Setter Property="FontSize" Value="14"/>
@@ -14,8 +17,14 @@
   <Style TargetType="Label">
     <Setter Property="FontFamily" Value="Cascadia Code" />
     <Setter Property="FontSize" Value="14"/>
-    <Setter Property="Margin" Value="0, 8, 0, 4" />
+    <Setter Property="Margin" Value="-5, 8, 0, 4" />
   </Style>
 
-  <CornerRadius x:Key="BrdRad">6</CornerRadius>
+  <Style TargetType="ComboBox">
+    <Setter Property="FontFamily" Value="Cascadia Code" />
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="Padding" Value="8, 4" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+
 </ResourceDictionary>

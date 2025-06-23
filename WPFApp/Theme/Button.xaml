@@ -7,7 +7,7 @@
     <Setter Property="Padding" Value="8, 6"/>
     <Setter Property="Background" Value="#2c4d8a"/>
     <Setter Property="Foreground" Value="#ffffff"/>
-    <Setter Property="Padding" Value="10,5"/>
+    <Setter Property="Padding" Value="24,12"/>
     <Setter Property="FontWeight" Value="Bold"/>
     <Setter Property="BorderBrush" Value="#FFFFFF"/>
     <Setter Property="Cursor" Value="Hand"/>
@@ -19,8 +19,7 @@
                   CornerRadius="{StaticResource BrdRad}"
                   BorderThickness="2"
                   BorderBrush="{TemplateBinding BorderBrush}"
-                  Padding="18, 12"
-                  RenderTransformOrigin="0.5,0.5">
+                  Padding="{TemplateBinding Padding}">
                   
             <ContentPresenter HorizontalAlignment="Center"
                               VerticalAlignment="Center"

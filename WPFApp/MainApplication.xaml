@@ -8,31 +8,47 @@
         Title="Products - My Store DB" Height="650" Width="970">
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="8"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="1*" />
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <StackPanel Grid.Row="1">
-      <Grid Height="Auto" Margin="8, 8, 8, 32">
+    <StackPanel Grid.Row="0"  Background="#2c4d8a">
+      <Grid Height="Auto" Margin="8, 8, 8, 16">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel>
-          <TextBlock Text="[My Store DB] Product Manager" FontWeight="Bold" FontSize="24"/>
-          <TextBlock Text="{Binding ProdStat}" />
+        <StackPanel Margin="0, 8, 0, 0">
+          <TextBlock Text="[My Store DB] Product Manager" FontWeight="Bold" Foreground="#fff" FontSize="24"/>
+          <TextBlock Text="{Binding ProdStat}" Foreground="#fff"/>
         </StackPanel>
       </Grid>
 
-      <Border BorderThickness="0, 0.5, 0, 0" BorderBrush="#000">
-        <!-- TextBox FontSize="13" KeyDown="QueryBox_KeyDown" BorderThickness="0" Padding="8, 12"/-->
-      </Border>
+      <Grid Margin="8">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="1*" />
+          <ColumnDefinition Width="8" />
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox FontSize="13"  Grid.Column="0"
+                 TextChanged="SQuery_TextChanged" 
+                 GotFocus="SQueryBox_GotFocus"
+                 LostFocus="SQueryBox_LostFocus"
+                 x:Name="SQueryBox"
+                 BorderThickness="0" 
+                 Padding="8" 
+                 Text="Search for products . . ."/>
+
+        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+          <Button Padding="10" Click="RndBtt_Click">Random</Button>
+        </StackPanel>
+      </Grid>
     </StackPanel>
 
-    <Grid Grid.Row="2">
+    <Grid Grid.Row="1">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="1*" />
@@ -53,7 +69,7 @@
                 </ControlTemplate>
               </Setter.Value>
             </Setter>
-            <Setter Property="Padding" Value="8, 4"/>
+            <Setter Property="Padding" Value="8, 6, 18, 6"/>
             <Setter Property="FontFamily" Value="JetBrains Mono NL"/>
             <Setter Property="FontSize" Value="13"/>
           </Style>
@@ -85,7 +101,7 @@
 
           <Rectangle Height="16"/>
           <TextBlock Text="Category"/>
-          <ComboBox Padding="8" Text="Category" x:Name="CategoryComboList" SelectionChanged="CategoryComboList_SelectionChanged" />
+          <ComboBox Padding="12" Text="Category" x:Name="CategoryComboList" SelectionChanged="CategoryComboList_SelectionChanged" />
 
           <Rectangle Height="16"/>
           <Grid>
@@ -118,7 +134,7 @@
       </Border>
     </Grid>
 
-    <Grid Grid.Row="3" Margin="16">
+    <Grid Grid.Row="2" Margin="16">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="1*" />
@@ -126,13 +142,13 @@
       </Grid.ColumnDefinitions>
 
       <StackPanel Grid.Column="0">
-        <Button Padding="24, 6" Click="Exit_Click" Background="#ededed" Foreground="#000">
+        <Button Click="Exit_Click" Background="#ededed" Foreground="#000">
           Exit / Log out
         </Button>
       </StackPanel>
 
       <StackPanel Grid.Column="2" Orientation="Horizontal">
-        <Button Padding="24, 6" Click="NewProduct_Click">✚ Add new product</Button>
+        <Button Click="NewProduct_Click">✚ Add new product</Button>
       </StackPanel>
     </Grid>
   </Grid>

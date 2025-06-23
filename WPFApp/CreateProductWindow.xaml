@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFApp"
         mc:Ignorable="d"
-        Title="CreateProductWindow" Height="520" Width="500" MinHeight="520">
+        Title="Add Product - My Store DB" 
+        Height="520" Width="500" 
+        MinHeight="520" MinWidth="400">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="1*" />
