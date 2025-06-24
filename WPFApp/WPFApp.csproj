@@ -18,8 +18,13 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Assets\error.png" />
     <None Remove="Assets\icon.png" />
+    <None Remove="Assets\info.png" />
     <None Remove="Assets\login.png" />
+    <None Remove="Assets\question.png" />
+    <None Remove="Assets\success.png" />
+    <None Remove="Assets\warning.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,10 +41,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\error.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\info.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\login.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\question.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\success.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\warning.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

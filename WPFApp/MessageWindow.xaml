@@ -1,0 +1,57 @@
+﻿<Window x:Class="WPFApp.MessageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFApp"
+        mc:Ignorable="d"
+        Title="MessageWindow"
+        WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
+        MinWidth="500">
+
+  <Window.Resources>
+    <Style TargetType="{x:Type Button}"
+           BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="MinWidth" Value="120"/>
+      <Setter Property="Padding" Value="12,9"/>
+      <Setter Property="FontSize" Value="2"/>
+      <Setter Property="Margin" Value="8,0,0,0" />
+      <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}">
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="FontFamily" Value="{StaticResource FntFml}"/>
+      <Setter Property="LineHeight" Value="20"/>
+    </Style>
+  </Window.Resources>
+
+  <Grid Margin="8">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="1*"/>
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid Margin="8">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="1*"/>
+      </Grid.ColumnDefinitions>
+
+      <Image Source="/Assets/info.png" Grid.Column="0" Width="0" x:Name="CmpImage" Margin="0,8,8,8"/>
+
+      <StackPanel Margin="8" Grid.Column="1" VerticalAlignment="Center">
+        <TextBlock Text="This is the title of the message box" TextWrapping="Wrap" FontWeight="Bold" FontSize="16" x:Name="CmpMsg"/>
+        <TextBlock Text="Content of the message box if the message is too long is gonna overflow so bad that" TextWrapping="Wrap" x:Name="CmpDesc"/>
+      </StackPanel>
+    </Grid>
+
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8" HorizontalAlignment="Right" x:Name="CmpActions">
+      <Button Click="ActionBtt_Click" x:Name="BttOk">OK</Button>
+      <Button Click="ActionBtt_Click" x:Name="BttCancel" Background="#f0f0f0" Foreground="#000">Cancel</Button>
+      <Button Click="ActionBtt_Click" x:Name="BttYes">Yes</Button>
+      <Button Click="ActionBtt_Click" x:Name="BttNo" Background="#f0f0f0" Foreground="#000">No</Button>
+    </StackPanel>
+  </Grid>
+</Window>

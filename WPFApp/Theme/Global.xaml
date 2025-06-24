@@ -2,10 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
   <CornerRadius x:Key="BrdRad">6</CornerRadius>
+  <FontFamily x:Key="FntFml">Cascadia Code</FontFamily>
 
 
   <Style TargetType="TextBlock">
-    <Setter Property="FontFamily" Value="Cascadia Code" />
+    <Setter Property="FontFamily" Value="{StaticResource FntFml}" />
     <Setter Property="FontSize" Value="14"/>
   </Style>
 
@@ -15,13 +16,13 @@
   </Style>
 
   <Style TargetType="Label">
-    <Setter Property="FontFamily" Value="Cascadia Code" />
+    <Setter Property="FontFamily" Value="{StaticResource FntFml}" />
     <Setter Property="FontSize" Value="14"/>
     <Setter Property="Margin" Value="-5, 8, 0, 4" />
   </Style>
 
   <Style TargetType="ComboBox">
-    <Setter Property="FontFamily" Value="Cascadia Code" />
+    <Setter Property="FontFamily" Value="{StaticResource FntFml}" />
     <Setter Property="FontSize" Value="14"/>
     <Setter Property="Padding" Value="8, 4" />
     <Setter Property="BorderThickness" Value="2" />
