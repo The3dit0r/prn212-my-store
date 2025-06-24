@@ -1,0 +1,74 @@
+﻿<Window
+  x:Class="WPFApp.TestWindows"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:WPFApp"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  Title="Testing Window - Message Box"
+  Width="640"
+  Height="500"
+  mc:Ignorable="d">
+
+  <Window.Resources>
+    <Style TargetType="Label">
+      <Setter Property="Margin" Value="0,12,0,4" />
+    </Style>
+
+  </Window.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="1*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <StackPanel Grid.Row="0" Margin="8">
+      <StackPanel>
+        <Label>Title</Label>
+        <TextBox x:Name="TitleInput" Text="Title" />
+      </StackPanel>
+
+      <StackPanel>
+        <Label>Message</Label>
+        <TextBox x:Name="MessageInput" Text="Message" />
+      </StackPanel>
+
+      <StackPanel>
+        <Label>Description</Label>
+        <TextBox x:Name="DescriptionInput" Text="Description" />
+      </StackPanel>
+
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="1*" />
+          <ColumnDefinition Width="16" />
+          <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+          <Label>Message's type</Label>
+          <ComboBox x:Name="ImageInput" />
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+          <Label>Message's Actions</Label>
+          <ComboBox x:Name="ActionsInput" />
+        </StackPanel>
+      </Grid>
+
+      <TextBlock
+        Name="TextResults"
+        Padding="4,24"
+        Text="Results of the input: -" />
+    </StackPanel>
+
+    <StackPanel Grid.Row="1" Margin="12">
+      <Button
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Click="Button_Click">
+        Open Pop Up Message
+      </Button>
+    </StackPanel>
+  </Grid>
+</Window>

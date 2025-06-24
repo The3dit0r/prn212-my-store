@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic.ApplicationServices;
 using Services;
 using System;
 using System.Collections;
@@ -17,11 +18,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WPFApp {
+namespace WPFApp
+{
   /// <summary>
   /// Interaction logic for MainApplication.xaml
   /// </summary>
-  public partial class MainApplication : Window, INotifyPropertyChanged {
+  public partial class MainApplication : Window, INotifyPropertyChanged
+  {
     private readonly ProductService pservice;
     private readonly CategoryService cservice;
 
@@ -42,24 +45,29 @@ namespace WPFApp {
     //  }
     //}
 
-    public string ProdStat {
+    public string ProdStat
+    {
       get => _prodStat;
-      set {
+      set
+      {
         _prodStat = value;
         OnPropertyChanged(nameof(ProdStat));
       }
     }
 
     private Product? curProduct;
-    public Product? CurProduct {
+    public Product? CurProduct
+    {
       get => curProduct;
-      set {
+      set
+      {
         curProduct = value;
         OnPropertyChanged(nameof(CurProduct));
       }
     }
 
-    private void PopulateComboBox() {
+    private void PopulateComboBox()
+    {
       var boxItems = categories.Select((c) =>
         $"{c.CategoryId}: {c.CategoryName}"
        );
@@ -67,15 +75,17 @@ namespace WPFApp {
       CategoryComboList.ItemsSource = boxItems;
     }
 
-    private void RefreshDataList() {
+    private void RefreshDataList()
+    {
       var newProducts = pservice.GetProducts();
       products = newProducts.ToList();
       ProdDataGrid.ItemsSource = products.Where(FilterProdByQuery);
-      
+
       ProdStat = $"Current product count: {products.Count}";
     }
 
-    public MainApplication() {
+    public MainApplication()
+    {
       InitializeComponent();
       DataContext = this;
 
@@ -91,26 +101,31 @@ namespace WPFApp {
       ToggleSidebar(false);
     }
 
-    private void ToggleSidebar(bool p) {
+    private void ToggleSidebar(bool p)
+    {
       Sidebar.Width = p ? 410 : 0;
     }
 
-    private void OnPropertyChanged(string name) {
+    private void OnPropertyChanged(string name)
+    {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    private void CloseSide_Click(object sender, RoutedEventArgs e) {
+    private void CloseSide_Click(object sender, RoutedEventArgs e)
+    {
       ToggleSidebar(false);
     }
 
-    private void ToggleProductDetail(Product prod) {
+    private void ToggleProductDetail(Product prod)
+    {
       CurProduct = prod;
 
       firstView = true;
       ProductDetails.DataContext = CurProduct;
       ToggleSidebar(true);
 
-      if (null == CurProduct) {
+      if (null == CurProduct)
+      {
         CategoryComboList.SelectedIndex = -1;
         return;
       }
@@ -124,8 +139,10 @@ namespace WPFApp {
       );
     }
 
-    private void ProdDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-      if (sender is not DataGrid) {
+    private void ProdDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      if (sender is not DataGrid)
+      {
         return;
       }
 
@@ -133,16 +150,19 @@ namespace WPFApp {
       ToggleProductDetail(prod);
     }
 
-    private void Update_Click(object sender, RoutedEventArgs e) {
+    private void Update_Click(object sender, RoutedEventArgs e)
+    {
       if (CurProduct == null) return;
       pservice.UpdateProduct(CurProduct);
       RefreshDataList();
     }
 
-    private void CategoryComboList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    private void CategoryComboList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
       if (CurProduct == null) return;
 
-      if (firstView) {
+      if (firstView)
+      {
         firstView = false;
         return;
       }
@@ -153,33 +173,59 @@ namespace WPFApp {
       RefreshDataList();
     }
 
-    private void Remove_Click(object sender, RoutedEventArgs e) {
+    private void Remove_Click(object sender, RoutedEventArgs e)
+    {
       if (CurProduct == null) return;
 
-      string d = $"Product: [ID: {CurProduct.ProductId}] {CurProduct.ProductName}";
+      string d = $"[ID: {CurProduct.ProductId}] {CurProduct.ProductName}";
 
-      var ans = MessageBox.Show(
-        "Are you sure you want to remove the following item?\n"
-        + d + "\n\nThis action is not revertable",
-        "Confirmation",
-        MessageBoxButton.YesNo,
-        MessageBoxImage.Warning
-      );
+      var ans = MessageWindow.Show(new MessageOptions
+      {
+        Title = "Confirmation",
+        Message = "Are you sure you want to remove the following product?",
+        Description = $"Removing: {d}"
+         + "\n\nWarning: This action is not reversable!",
+        Image = MessageImage.Question,
+        Actions = MessageActions.YesNo,
+        Owner = GetWindow(this)
+      });
 
-      if (ans != MessageBoxResult.Yes) {
+      if (ans != MessageResults.Yes)
+      {
         return;
       }
 
-      pservice.DeleteProduct(CurProduct);
-      RefreshDataList();
-
-      try {
+      try
+      {
+        pservice.DeleteProduct(CurProduct);
+        RefreshDataList();
         CurProduct = null;
-        MessageBox.Show("Product removed!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-      } catch { }
+
+        MessageWindow.Show(new MessageOptions
+        {
+          Title = "Success",
+          Message = "Product removed from the database!",
+          Description = $"Removed: {d}",
+          Image = MessageImage.Success,
+          Owner = GetWindow(this)
+        });
+
+      }
+      catch (Exception ex)
+      {
+        MessageWindow.Show(new MessageOptions
+        {
+          Title = "Error",
+          Message = "An error occured while removing product!",
+          Description = $"Error message: {ex.Message}",
+          Image = MessageImage.Error,
+          Owner = GetWindow(this)
+        });
+      }
     }
 
-    private void LaunchMainWindow() {
+    private void LaunchMainWindow()
+    {
       var initial = Application.Current.MainWindow;
       Application.Current.MainWindow = new MainWindow(true);
       Application.Current.MainWindow.Show();
@@ -187,23 +233,30 @@ namespace WPFApp {
       initial.Close();
     }
 
-    private void Exit_Click(object sender, RoutedEventArgs e) {
-      var ans = MessageBox.Show(
-        "Are you sure you want to exit?",
-        "Confirmation",
-        MessageBoxButton.YesNo,
-        MessageBoxImage.Question
-      );
+    private void Exit_Click(object sender, RoutedEventArgs e)
+    {
+      var ans = MessageWindow.Show(new MessageOptions
+      {
+        Title = "Exit confirmation",
+        Message = "Are you sure you want to exit?",
+        Description = "This action will also log you out!",
+        Image = MessageImage.Question,
+        Actions = MessageActions.YesNo,
+        Owner = GetWindow(this)
+      });
 
-      if (ans != MessageBoxResult.Yes) {
+      if (ans != MessageResults.Yes)
+      {
         return;
       }
 
       LaunchMainWindow();
     }
 
-    private void NewProduct_Click(object sender, RoutedEventArgs e) {
-      var wind = new CreateProductWindow() {
+    private void NewProduct_Click(object sender, RoutedEventArgs e)
+    {
+      var wind = new CreateProductWindow()
+      {
         Owner = Window.GetWindow(this)
       };
 
@@ -211,22 +264,27 @@ namespace WPFApp {
       RefreshDataList();
     }
 
-    private void DataGrid_OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e) {
-      if (e.PropertyName == "Category") {
+    private void DataGrid_OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+    {
+      if (e.PropertyName == "Category")
+      {
         e.Column = null;
       }
     }
 
     private string _query = "";
-    string SearchQuery {
+    string SearchQuery
+    {
       get => _query;
-      set {
+      set
+      {
         _query = value;
         RefreshDataList();
       }
     }
 
-    private bool FilterProdByQuery(Product prod) {
+    private bool FilterProdByQuery(Product prod)
+    {
       var s1 = prod.ProductName.ToLower();
       var s2 = $"id:{prod.ProductId}".ToLower();
       var s3 = $"cat:{prod.CategoryId}".ToLower();
@@ -238,16 +296,20 @@ namespace WPFApp {
       return false;
     }
 
-    private void SQuery_TextChanged(object sender, object _) {
-      if (SQueryBox.IsFocused) {
+    private void SQuery_TextChanged(object sender, object _)
+    {
+      if (SQueryBox.IsFocused)
+      {
         SearchQuery = SQueryBox.Text;
       }
     }
 
-    private void SetBoxText(bool focus) {
+    private void SetBoxText(bool focus)
+    {
       var showPlaceholder = !focus && _query.Length == 0;
 
-      if (showPlaceholder) {
+      if (showPlaceholder)
+      {
         SQueryBox.Text = "Search for products (query | id:<id> | cat:<category_id>) . . .";
         SQueryBox.Foreground = Brushes.Gray;
 
@@ -258,15 +320,24 @@ namespace WPFApp {
       SQueryBox.Foreground = Brushes.Black;
     }
 
-    private void SQueryBox_GotFocus(object sender, object _) {
+    private void SQueryBox_GotFocus(object sender, object _)
+    {
       SetBoxText(true);
     }
 
-    private void SQueryBox_LostFocus(object sender, object _) {
+    private void SQueryBox_LostFocus(object sender, object _)
+    {
       SetBoxText(false);
     }
 
-    private void RndBtt_Click(object sender, RoutedEventArgs e) {
+    private void ClearBtt_Click(object sender, RoutedEventArgs e)
+    {
+      SearchQuery = "";
+      SQueryBox.Text = "";
+    }
+
+    private void RndBtt_Click(object sender, RoutedEventArgs e)
+    {
       if (products.IsNullOrEmpty()) return;
 
       var r = products[new Random().Next(products.Count)];

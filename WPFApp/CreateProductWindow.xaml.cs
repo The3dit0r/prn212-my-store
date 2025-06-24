@@ -1,13 +1,15 @@
 ﻿
-using Services;
 using BusinessObjects;
-using System.Windows;
-using System.ComponentModel;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic.ApplicationServices;
+using Services;
+using System.ComponentModel;
+using System.Windows;
 
 namespace WPFApp;
 
-public partial class CreateProductWindow : Window, INotifyPropertyChanged {
+public partial class CreateProductWindow : Window, INotifyPropertyChanged
+{
   private readonly ProductService pservice;
   private readonly CategoryService cservice;
 
@@ -17,23 +19,27 @@ public partial class CreateProductWindow : Window, INotifyPropertyChanged {
 
   public event PropertyChangedEventHandler? PropertyChanged;
 
-  public Product CurProd {
+  public Product CurProd
+  {
     get => _product;
-    set {
+    set
+    {
       _product = value;
       OnPropertyChanged(nameof(CurProd));
     }
   }
 
 
-  private void PopulateComboBox(List<Category> cat) {
+  private void PopulateComboBox(List<Category> cat)
+  {
     var boxItems = cat.Select((c) =>
       $"{c.CategoryId}: {c.CategoryName}"
      );
 
     CategoryComboList.ItemsSource = boxItems;
   }
-  public CreateProductWindow() {
+  public CreateProductWindow()
+  {
     InitializeComponent();
     pservice = new ProductService();
     cservice = new CategoryService();
@@ -45,26 +51,48 @@ public partial class CreateProductWindow : Window, INotifyPropertyChanged {
     PopulateComboBox(categories);
   }
 
-  private void AddButton_Click(object sender, RoutedEventArgs e) {
-    try {
+  private void AddButton_Click(object sender, RoutedEventArgs e)
+  {
+    try
+    {
       pservice.AddProduct(CurProd);
-      MessageBox.Show("Successfully added new item!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+      MessageWindow.Show(new MessageOptions
+      {
+        Title = "Success",
+        Message = "New product added to the database!",
+        Description = $"Added product: [ID: {CurProd.ProductId}] {CurProd.ProductName}",
+        Image = MessageImage.Success,
+        Owner = GetWindow(this)
+      });
+
       DialogResult = true;
-    } catch (Exception err) {
-      MessageBox.Show($"An error occured:\n{err.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+    catch (Exception err)
+    {
+      MessageWindow.Show(new MessageOptions
+      {
+        Title = "Error",
+        Message = "An error occured while adding product",
+        Description = $"Error message: {err.Message}",
+        Image = MessageImage.Success,
+        Owner = GetWindow(this)
+      });
     }
   }
 
-  private void OnPropertyChanged(string name) {
+  private void OnPropertyChanged(string name)
+  {
     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
   }
 
-  private void CategoryComboList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
+  private void CategoryComboList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+  {
     CurProd.CategoryId = categories[CategoryComboList.SelectedIndex].CategoryId;
     ValidateData();
   }
 
-  private void ValidateData() {
+  private void ValidateData()
+  {
     var name = CurProd.ProductName.Trim();
 
     var c1 = name.Length > 0 && name.Length <= 40;
@@ -80,7 +108,8 @@ public partial class CreateProductWindow : Window, INotifyPropertyChanged {
     //StatusBlock.Text = $"{c1} {c2} {c3} {c4}";
   }
 
-  private void ClearInput() {
+  private void ClearInput()
+  {
     CurProd.ProductName = "";
     CurProd.UnitPrice = -1;
     CurProd.UnitsInStock = -1;
@@ -92,25 +121,34 @@ public partial class CreateProductWindow : Window, INotifyPropertyChanged {
     CategoryComboList.SelectedIndex = 0;
   }
 
-  private void Name_TextChanged(object sender, object e) {
+  private void Name_TextChanged(object sender, object e)
+  {
     CurProd.ProductName = NameText.Text;
     ValidateData();
   }
 
-  private void UiS_TextChanged(object sender, object e) {
-    try { 
+  private void UiS_TextChanged(object sender, object e)
+  {
+    try
+    {
       CurProd.UnitsInStock = short.Parse(UiSText.Text);
-    } catch {
+    }
+    catch
+    {
       CurProd.UnitsInStock = -1;
     }
 
     ValidateData();
   }
 
-  private void Price_TextChanged(object sender, object e) {
-    try {
+  private void Price_TextChanged(object sender, object e)
+  {
+    try
+    {
       CurProd.UnitPrice = decimal.Parse(PriceText.Text);
-    } catch {
+    }
+    catch
+    {
       CurProd.UnitPrice = -1;
     }
     ValidateData();

@@ -13,26 +13,32 @@ namespace WPFApp;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window {
+public partial class MainWindow : Window
+{
   bool _loading = false;
 
-  bool Loading {
+  bool Loading
+  {
     get => _loading;
-    set {
+    set
+    {
       if (value == _loading) return;
 
       _loading = value;
 
-      if (value) {
+      if (value)
+      {
         LoadingString(13, -3);
       }
     }
   }
 
-  public MainWindow(bool disableLoad) {
+  public MainWindow(bool disableLoad)
+  {
     InitializeComponent();
 
-    if (disableLoad) {
+    if (disableLoad)
+    {
       LoadingText.Text = "Please login to continue";
       LoadingStatus.Opacity = 0;
       ButtonsControl.Opacity = 1;
@@ -42,7 +48,8 @@ public partial class MainWindow : Window {
     }
   }
 
-  public MainWindow() {
+  public MainWindow()
+  {
     InitializeComponent();
 
     ButtonsControl.Opacity = 0;
@@ -51,17 +58,20 @@ public partial class MainWindow : Window {
     FakeDelayLoadLoginWindow();
   }
 
-  private async void LoadingString(int len, int cur) {
+  private async void LoadingString(int len, int cur)
+  {
     var str = "▉";
 
-    if (!Loading) {
+    if (!Loading)
+    {
       LoadingStatus.Opacity = 0;
-      return; 
+      return;
     }
 
     LoadingStatus.Opacity = 1;
     LoadingFrame.Text = "";
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++)
+    {
       bool upper = i <= cur;
       bool lower = i >= cur - 3;
       LoadingFrame.Text += $"{(upper && lower ? str : " ")}";
@@ -74,22 +84,26 @@ public partial class MainWindow : Window {
     LoadingString(len, cur + 1 > len + 2 ? -3 : cur + 1);
   }
 
-  private async void FakeDelayLoadLoginWindow() {
+  private async void FakeDelayLoadLoginWindow()
+  {
     await Task.Delay(2000);
     LoadAuthWindow();
   }
 
-  private async void LoadAuthWindow() {
+  private async void LoadAuthWindow()
+  {
     LoadingText.Text = "Waiting for authentication\n\n. . . . .";
     Loading = false;
     ButtonsControl.Opacity = 0;
 
-    Window win = new LoginWindow() {
+    Window win = new LoginWindow()
+    {
       Owner = Window.GetWindow(this)
     };
 
     bool? success = win.ShowDialog();
-    if (success == true) {
+    if (success == true)
+    {
       Loading = true;
       ButtonsControl.IsEnabled = false;
 
@@ -99,8 +113,18 @@ public partial class MainWindow : Window {
       await Task.Delay(1000);
 
       LaunchMainApplication();
-    } else {
-      MessageBox.Show("Authentication failed! Please try again", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+    else
+    {
+      MessageWindow.Show(new MessageOptions
+      {
+        Title = "Authentication Error",
+        Message = "Authentication failed!",
+        Description = "Please try again to continue",
+        Image = MessageImage.Error,
+        Owner = GetWindow(this)
+      });
+
       ButtonsControl.Opacity = 1;
       LoadingText.Text = "Please login to continue";
       Loading = false;
@@ -108,7 +132,8 @@ public partial class MainWindow : Window {
     }
   }
 
-  private void LaunchMainApplication() {
+  private void LaunchMainApplication()
+  {
     var initial = Application.Current.MainWindow;
     Application.Current.MainWindow = new MainApplication();
     Application.Current.MainWindow.Show();
@@ -116,11 +141,13 @@ public partial class MainWindow : Window {
     initial.Close();
   }
 
-  private void LoginButton_Click(object sender, RoutedEventArgs e) {
+  private void LoginButton_Click(object sender, RoutedEventArgs e)
+  {
     LoadAuthWindow();
   }
 
-  private void CloseButton_Click(object sender, RoutedEventArgs e) {
+  private void CloseButton_Click(object sender, RoutedEventArgs e)
+  {
     Application.Current.Shutdown();
   }
 }

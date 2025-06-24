@@ -5,7 +5,8 @@ using System.Windows.Media.Imaging;
 
 namespace WPFApp;
 
-public enum MessageImage {
+public enum MessageImage
+{
   Info,
   Warning,
   Error,
@@ -13,14 +14,16 @@ public enum MessageImage {
   Success,
 }
 
-public enum MessageActions {
+public enum MessageActions
+{
   Ok,
   YesNo,
   CancelOk,
   TestOnly
 }
 
-public enum MessageResults {
+public enum MessageResults
+{
   Ok,
   Yes,
   No,
@@ -28,9 +31,10 @@ public enum MessageResults {
   None
 }
 
-public class MessageOptions {
+public class MessageOptions
+{
   public string Title { get; set; } = "Message";
-  public string Message { get; set; } = "This is a message window";
+  public string Message { get; set; } = "";
   public string Description { get; set; } = "";
   public MessageImage Image { get; set; } = MessageImage.Info;
   public MessageActions Actions { get; set; } = MessageActions.Ok;
@@ -38,94 +42,118 @@ public class MessageOptions {
   public Window? Owner { get; set; }
 }
 
-public partial class MessageWindow : Window {
+public partial class MessageWindow : Window
+{
 
   public MessageResults Results = MessageResults.None;
 
-  private void ShowUIElements(List<UIElement> elements, params int[] excepts) {
+  private void ShowUIElements(List<UIElement> elements, params int[] excepts)
+  {
     if (elements == null) return;
 
-    for (int i = 0; i < elements.Count; i++) {
-      if (excepts.Contains(i)) {
+    for (int i = 0; i < elements.Count; i++)
+    {
+      if (excepts.Contains(i))
+      {
         elements[i].Visibility = Visibility.Collapsed;
-      } else {
+      }
+      else
+      {
         elements[i].Visibility = Visibility.Visible;
       }
     }
   }
 
-  public void SetImage(MessageImage img) {
+  public void SetImage(MessageImage img)
+  {
     string ImageSource = "";
 
-    switch (img) {
-      case MessageImage.Info: {
+    switch (img)
+    {
+      case MessageImage.Info:
+        {
           ImageSource = "Assets/info.png";
           break;
         }
 
-      case MessageImage.Warning: {
+      case MessageImage.Warning:
+        {
           ImageSource = "Assets/warning.png";
           break;
         }
 
-      case MessageImage.Error: {
+      case MessageImage.Error:
+        {
           ImageSource = "Assets/error.png";
           break;
         }
 
-      case MessageImage.Question: {
+      case MessageImage.Question:
+        {
           ImageSource = "Assets/question.png";
           break;
         }
 
-      case MessageImage.Success: {
+      case MessageImage.Success:
+        {
           ImageSource = "Assets/success.png";
           break;
         }
     }
 
-    if (ImageSource.Length > 0) {
+    if (ImageSource.Length > 0)
+    {
 
       string strUri = $"pack://application:,,,/{ImageSource}";
       CmpImage.Source = new BitmapImage(new Uri(strUri));
 
       CmpImage.Width = 60;
       CmpImage.Height = 60;
-    } else {
+    }
+    else
+    {
       CmpImage.Width = 0;
       CmpImage.Height = 0;
     }
   }
 
-  public void SetActions(MessageActions actions) {
+  public void SetActions(MessageActions actions)
+  {
     List<UIElement> buttons = new List<UIElement> { BttCancel, BttOk, BttYes, BttNo };
 
-    switch (actions) {
-      case MessageActions.CancelOk: {
+    switch (actions)
+    {
+      case MessageActions.CancelOk:
+        {
           ShowUIElements(buttons, 2, 3);
           break;
         }
 
-      case MessageActions.YesNo: {
+      case MessageActions.YesNo:
+        {
           ShowUIElements(buttons, 0, 1);
           break;
         }
 
-      case MessageActions.TestOnly: {
+      case MessageActions.TestOnly:
+        {
           ShowUIElements(buttons);
           break;
         }
 
       case MessageActions.Ok:
-      default: {
+      default:
+        {
           ShowUIElements(buttons, 0, 2, 3);
           break;
         }
     }
   }
 
-  public void SetMessage(string msg) {
-    if (msg.IsNullOrEmpty()) {
+  public void SetMessage(string msg)
+  {
+    if (msg.IsNullOrEmpty())
+    {
       CmpMsg.Visibility = Visibility.Collapsed;
       return;
     }
@@ -134,8 +162,10 @@ public partial class MessageWindow : Window {
     CmpMsg.Text = msg;
   }
 
-  public void SetDescription(string desc) {
-    if (desc.IsNullOrEmpty()) {
+  public void SetDescription(string desc)
+  {
+    if (desc.IsNullOrEmpty())
+    {
       CmpDesc.Visibility = Visibility.Collapsed;
       return;
     }
@@ -145,11 +175,13 @@ public partial class MessageWindow : Window {
 
   }
 
-  public void SetTitle(string title) {
+  public void SetTitle(string title)
+  {
     this.Title = $"My Store DB | {title}";
   }
 
-  public MessageWindow(string title, string message, string desc, MessageImage image, MessageActions actions) {
+  public MessageWindow(string title, string message, string desc, MessageImage image, MessageActions actions)
+  {
     InitializeComponent();
 
     SetTitle(title);
@@ -162,13 +194,15 @@ public partial class MessageWindow : Window {
     this.SizeToContent = SizeToContent.WidthAndHeight;
   }
 
-  public MessageWindow() {
-    InitializeComponent();  
+  public MessageWindow()
+  {
+    InitializeComponent();
     //this.SizeToContent = SizeToContent.Height;
     this.SizeToContent = SizeToContent.WidthAndHeight;
   }
 
-  private void ActionBtt_Click(object sender, RoutedEventArgs e) {
+  private void ActionBtt_Click(object sender, RoutedEventArgs e)
+  {
     if (sender is not System.Windows.Controls.Button btn) return;
 
     var name = btn.Name;
@@ -176,13 +210,15 @@ public partial class MessageWindow : Window {
 
     //MessageBox.Show(name, "Clicked on");
 
-    switch (name) {
+    switch (name)
+    {
       case "BttOk": { results = MessageResults.Ok; break; }
       case "BttCancel": { results = MessageResults.Cancel; break; }
       case "BttYes": { results = MessageResults.Yes; break; }
       case "BttNo": { results = MessageResults.No; break; }
 
-      default: {
+      default:
+        {
           results = MessageResults.None;
           break;
         }
@@ -192,16 +228,27 @@ public partial class MessageWindow : Window {
     this.DialogResult = true;
   }
 
-  public static MessageResults Show(MessageOptions options) {
+  public static MessageResults Show(MessageOptions options)
+  {
     var PopUp = new MessageWindow(
       options.Title,
       options.Message,
       options.Description,
       options.Image,
       options.Actions
-    ) {
+    )
+    {
       Owner = options.Owner
     };
+
+    if (options.Owner == null)
+    {
+      PopUp.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+    }
+    else
+    {
+      PopUp.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+    }
 
     PopUp.ShowDialog();
     return PopUp.Results;
