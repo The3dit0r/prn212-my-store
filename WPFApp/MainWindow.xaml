@@ -90,8 +90,21 @@
       </StackPanel>
     </StackPanel>
 
-    <StackPanel Grid.Row="3" Margin="0,16,0,16">
-      <TextBlock Text="Made for: LAB 2 - PRN212 | By Group 2" TextAlignment="Center" />
+    <StackPanel
+      Grid.Row="3"
+      Margin="0,16,0,16"
+      HorizontalAlignment="Center"
+      Orientation="Horizontal">
+      <TextBlock VerticalAlignment="Center" Text="Made for: LAB 2 - PRN212 | By Group 2 " />
+      <Button
+        Padding="12,4"
+        VerticalAlignment="Center"
+        Background="#e0e0e0"
+        FontSize="10"
+        Click="MemberClick"
+        Foreground="#000">
+        View member
+      </Button>
     </StackPanel>
   </Grid>
 </Window>

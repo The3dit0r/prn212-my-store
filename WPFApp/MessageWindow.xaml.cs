@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 
 namespace WPFApp;
@@ -177,7 +178,7 @@ public partial class MessageWindow : Window
 
   public void SetTitle(string title)
   {
-    this.Title = $"My Store DB | {title}";
+    this.Title = $"[My Store DB] {title}";
   }
 
   public MessageWindow(string title, string message, string desc, MessageImage image, MessageActions actions)
@@ -192,14 +193,30 @@ public partial class MessageWindow : Window
 
     //this.SizeToContent = SizeToContent.Height;
     this.SizeToContent = SizeToContent.WidthAndHeight;
+
+
+    if (Owner == null) return;
+    Owner.GotFocus += Owner_GotFocus;
+
+    this.Closed += MessageWindow_Closed;
   }
 
-  public MessageWindow()
-  {
-    InitializeComponent();
-    //this.SizeToContent = SizeToContent.Height;
-    this.SizeToContent = SizeToContent.WidthAndHeight;
+  private void MessageWindow_Closed(object? sender, EventArgs e) {
+    if (Owner == null) return;
+    Owner.GotFocus -= Owner_GotFocus;
+    this.Closed -= MessageWindow_Closed;
   }
+
+  private void Owner_GotFocus(object sender, RoutedEventArgs e) {
+    this.Focus();
+  }
+
+  //public MessageWindow()
+  //{
+  //  InitializeComponent();
+  //  //this.SizeToContent = SizeToContent.Height;
+  //  this.SizeToContent = SizeToContent.WidthAndHeight;
+  //}
 
   private void ActionBtt_Click(object sender, RoutedEventArgs e)
   {

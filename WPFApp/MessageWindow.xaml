@@ -7,6 +7,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   Title="MessageWindow"
   MinWidth="500"
+  MaxWidth="800"
   ResizeMode="NoResize"
   WindowStartupLocation="CenterOwner"
   WindowStyle="ToolWindow"

@@ -87,7 +87,11 @@ public partial class MainWindow : Window
   private async void FakeDelayLoadLoginWindow()
   {
     await Task.Delay(2000);
-    LoadAuthWindow();
+    //LoadAuthWindow();
+    LoadingText.Text = "Please login to continue";
+    LoadingStatus.Opacity = 0;
+    ButtonsControl.Opacity = 1;
+    Loading = false;
   }
 
   private async void LoadAuthWindow()
@@ -149,5 +153,22 @@ public partial class MainWindow : Window
   private void CloseButton_Click(object sender, RoutedEventArgs e)
   {
     Application.Current.Shutdown();
+  }
+
+  private void MemberClick(object sender, RoutedEventArgs e)
+  {
+    MessageWindow.Show(new MessageOptions
+    {
+      Title = "Group members",
+      Message = "[Group 2] Member list (5)",
+      Description = "" +
+      "──────────────────────────────────────────────" +
+      "\nLê Minh Đức                         [SE192044]" +
+      "\nDương Hồng Quang                    [SE192047]" +
+      "\nTrương Đức Trọng                    [SE182423]" +
+      "\nTrần Tuấn Minh                      [SE192879]" +
+      "\nTrần Đặng Minh Quân                 [SE196621]",
+      Owner = this
+    });
   }
 }
